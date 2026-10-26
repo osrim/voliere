@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-labelledby="voliere-mono-title voliere-mono-desc">
+  <title id="voliere-mono-title">voliere</title>
+  <desc id="voliere-mono-desc">A single-color bird with a closed eye and a raised wing flying inside a domed cage. Its beak extends through the right wall. The eye and feather details are transparent.</desc>
+  <defs>
+    <mask id="voliere-mono-details" maskUnits="userSpaceOnUse" x="0" y="0" width="128" height="128" style="mask-type: luminance">
+      <rect width="128" height="128" fill="#fff" />
+      <path d="M69 80 C60 78 49 67 46 54 Q45 50 48 50 Q52 50 58 57 Q57 49 60 50 Q65 52 68 60 Q70 56 73 61 C77 68 78 75 73 79 Q71 81 69 80 Z" fill="#fff" stroke="#000" stroke-width="5.6" stroke-linejoin="round" />
+      <path d="M69 80 C60 78 49 67 46 54 Q45 50 48 50 Q52 50 58 57 Q57 49 60 50 Q65 52 68 60 Q70 56 73 61 C77 68 78 75 73 79 Q71 81 69 80 Z" fill="#fff" />
+      <path d="M51 57 Q57 69 68 75 M61 58 Q63 65 68 69" fill="none" stroke="#000" stroke-width="1.4" stroke-linecap="round" />
+      <path d="M38 78 L46 81 M42 83 L48 85" fill="none" stroke="#000" stroke-width="1.6" stroke-linecap="round" />
+      <path d="M65 48 Q73 41 80 42" fill="none" stroke="#000" stroke-width="2.1" stroke-linecap="round" />
+      <path d="M88 55 Q94 62 100 55" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round" />
+      <path d="M111 61 L118 61" fill="none" stroke="#000" stroke-width="1.2" stroke-linecap="round" />
+    </mask>
+  </defs>
+  <g fill="none" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor">
+    <path d="M65 17 C57 13 55 8 58 5 C64 6 66 11 65 17 Z M65 16 C65 10 70 7 74 8 C75 13 71 16 65 17 Z" fill="none" stroke-width="2.6" />
+    <path d="M22 114 C24 95 20 72 23 55 C26 37 42 27 54 22 Q61 19 65 17 C87 19 109 28 113 47 M113 75.2 Q111 97 111 114" stroke-width="4" />
+    <g stroke-width="2.5">
+      <path d="M50 24 C41.36 35.52 36.867 50.496 36.3 65.831" />
+      <path d="M38.8 90.576 C40.762 98.601 43.84 106.24 48 113" />
+      <path d="M65 18 C63.38 23.4 62.052 29.027 61.009 34.787" />
+      <path d="M61.467 102.559 C62.195 106.15 63.04 109.64 64 113" />
+      <path d="M87.6 101.828 C86.028 105.743 84.16 109.49 82 113" />
+    </g>
+  </g>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 114 Q65 111 111 114 L114 120 Q65 124 15 120 Z" fill="none" stroke="currentColor" stroke-width="3.4" />
+    <path d="M23 117 Q65 115 106 117" fill="none" stroke="currentColor" stroke-width="1.5" />
+    <g transform="translate(8.64 4.88) scale(0.92)">
+      <g mask="url(#voliere-mono-details)">
+        <path d="M107 53 L121 59.5 Q124 61 121 63 L107 69 Z" fill="currentColor" stroke="currentColor" stroke-width="3" />
+        <path d="M35 74 C45 76 50 66 55 54 C60 43 70 36 81 37 C79 34 80 31 83 32 Q87 33 88 37 Q91 33 94 35 Q96 37 96 40 C105 43 110 52 108 64 C107 69 104 73 103 77 C105 92 93 103 76 102 C64 102 55 97 47 89 L34 81 Q30 77 35 74 Z" fill="currentColor" stroke="currentColor" stroke-width="4" />
+        <path d="M69 80 C60 78 49 67 46 54 Q45 50 48 50 Q52 50 58 57 Q57 49 60 50 Q65 52 68 60 Q70 56 73 61 C77 68 78 75 73 79 Q71 81 69 80 Z" fill="currentColor" stroke="currentColor" stroke-width="2.8" />
+      </g>
+      <path d="M46 42 Q51 42 55 46 M52 35 Q57 35 61 39" fill="none" stroke="currentColor" stroke-width="1.8" />
+    </g>
+  </g>
+</svg>

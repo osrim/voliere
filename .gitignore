@@ -1,0 +1,26 @@
+# OpenTofu: state, plans, and variable files contain credentials. They belong
+# in your private configuration repository, never here.
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+*.tfplan
+crash.log
+crash.*.log
+
+# Ansible
+*.retry
+
+# Rendered secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Proxmox installer images
+*.iso
+
+# macOS
+.DS_Store
