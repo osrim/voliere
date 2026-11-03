@@ -58,7 +58,7 @@ environment variables, and you choose how: `op run` for 1Password,
 
 ## Architecture
 
-Proxmox VE runs directly on the host and runs two Ubuntu 24.04 VMs. The
+Proxmox VE runs directly on the host and runs two Ubuntu 26.04 VMs. The
 `agents` VM runs the agents. The `deploy` VM runs what agents build.
 
 ```mermaid
@@ -121,18 +121,29 @@ boundary for the tailnet:
 The tailnet needs no exit nodes or subnet routes for Voliere, and the ACL keeps
 Voliere's tags from using any that exist.
 
+OpenTofu creates the join keys for the host and the VMs with a Tailscale OAuth
+client tagged `tag:voliere-provisioner`. Tailscale lets a client create keys
+only for tags it owns, so the policy makes `tag:voliere-provisioner` an owner
+of `tag:voliere` and `tag:voliere-host`. No device carries the provisioner tag,
+so it appears in no grant.
+
 ## Gitea
 
 Agents work only in one org on your Gitea server, `agents` by default.
 
-- **`agent-bot`** is in a write team that can create repositories. It can't
-  delete repositories or bypass branch protection.
-- **`review-bot`** is in the `reviewers` team. Its approval counts toward the
-  merge rule.
+- **`agent-bot`** is in the `writers` team. It can push branches and open pull
+  requests, but it can't create or delete repositories, or bypass branch
+  protection.
+- **`review-bot`** is in the `reviewers` team, with read access. Only its
+  approval counts toward the merge rule.
+- **OpenTofu creates every repository** in the org from a project list in your
+  configuration. Gitea makes a repository's creator its admin, and an admin
+  can remove branch protection, so agents never create repositories.
 - **Branch protection on `main`** requires green CI and one approval from
-  `reviewers`. New commits dismiss stale approvals. OpenTofu applies the rule
-  to every repository in the org, so a new project becomes protected on the
-  next `tofu apply`.
+  `reviewers`. New commits dismiss stale approvals. OpenTofu creates the rule
+  together with each repository.
+- **The template repository** accepts pushes only from you, through OpenTofu,
+  so agents can't change what new projects start from.
 
 Gitea tokens can't be scoped to one org, so the bot accounts are the boundary:
 neither bot belongs to anything outside the agents org.
@@ -228,9 +239,9 @@ flowchart TB
     newrepo --> prod
 ```
 
-**One-off apps** start in the agents org from a template repository. When an
-app is ready for production, push it to a repository your production hosting
-deploys from.
+**One-off apps** start from the template repository when you add them to your
+project list. When an app is ready for production, push it to a repository
+your production hosting deploys from.
 
 **Ongoing projects** get a pull mirror named `<project>-upstream`. Agents work
 in `<project>`. To promote work, follow these steps on your workstation:
