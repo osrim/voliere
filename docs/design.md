@@ -47,14 +47,15 @@ hosting, or your own repositories.
 Voliere keeps code and configuration apart. This repository holds the code.
 Your configuration lives in a private repository of your own:
 
-- `site.yaml`: the preview zone, the Gitea URL, the tailnet, and notification
-  URLs.
+- `site.yaml`: the preview zone, the Gitea URL, and the tailnet.
 - `hosts/<name>.yaml`: VM sizes and the VM network for each host.
 - OpenTofu state, encrypted.
 
 Secrets never enter either repository. They reach OpenTofu and Ansible as
 environment variables, and you choose how: `op run` for 1Password,
-`sops exec-env` for SOPS, or your own shell.
+`sops exec-env` for SOPS, or your own shell. The ntfy topic and the
+healthchecks.io ping key count as secrets: whoever knows them can read your
+alerts or fake a machine's check-ins.
 
 ## Architecture
 
@@ -66,7 +67,7 @@ flowchart TB
     you["Your devices"]
     subgraph box["Proxmox host"]
         agents["agents VM<br/>T3 Code, agent CLIs"]
-        deploy["deploy VM<br/>Coolify, act_runner, cloudflared"]
+        deploy["deploy VM<br/>Coolify, Gitea runner, cloudflared"]
         agents ~~~ deploy
     end
     gitea["Gitea server<br/>agents org"]
@@ -88,7 +89,7 @@ flowchart TB
 | ------------ | ------------------------ | --------------------------------------------------------- |
 | Proxmox host | What the VMs leave       | Hypervisor and firewall.                                  |
 | `agents`     | 14 GB, 4 vCPU, 200 GB    | T3 Code, agent CLIs, `tea`, mise toolchains.              |
-| `deploy`     | 12 GB, 4 vCPU, 250 GB    | Coolify (Traefik), Gitea `act_runner`, `cloudflared`.     |
+| `deploy`     | 12 GB, 4 vCPU, 250 GB    | Coolify (Traefik), the Gitea runner, `cloudflared`.       |
 
 The VM network is a bridge to a local segment in a homelab, or a NAT bridge on
 a cloud server with one public IP. Both VMs prune Docker images on a timer.
@@ -269,7 +270,7 @@ after a compromise.
 | Cloudflare Access service token  | `agents`    | Opening preview apps                    |
 | Skills deploy key (optional)     | `agents`    | Reading a private skills repository     |
 | Tailscale node keys              | Both VMs    | Joining the tailnet as `tag:voliere`    |
-| Notification URLs                | Both VMs    | Sending notifications                   |
+| ntfy topic, healthchecks.io ping key | Host and both VMs | Sending alerts and check-ins      |
 
 ## Infrastructure as code
 
@@ -333,7 +334,7 @@ updates install themselves.
 | Agent CLIs             | Their own auto-updater, or a weekly timer in the same window for CLIs without one. |
 | T3 Code                | Pinned. Nightly until provider delegation ships in a stable release, then stable. |
 | Coolify                | Pinned, auto-update off.                                |
-| `act_runner`, OpenTofu providers, Ansible collections | Pinned.                  |
+| Gitea runner, OpenTofu providers, Ansible collections | Pinned.                  |
 | Proxmox host           | Ansible, when you apply.                                |
 
 Renovate keeps the pins in this repository current. You upgrade by moving to a
@@ -355,6 +356,12 @@ Agent work survives on your Gitea server. Previews rebuild from there.
 
 ## Monitoring
 
-- **ntfy** receives CI results and host health from systemd timers.
-- **healthchecks.io** alerts you when the host stops checking in.
+Every machine runs a health check every 15 minutes from a systemd timer.
+
+- **ntfy** gets a notification when the check's findings change: a full disk,
+  a failed unit, a stopped service, or a known hardware error in the kernel
+  log. It also gets one when a CI run fails, from the template's workflow.
+- **healthchecks.io** gets a check-in from every run, with one check per
+  machine. When check-ins stop because a machine or its network is down,
+  healthchecks.io alerts you.
 - **T3 Connect** is optional for agent events on your devices.
