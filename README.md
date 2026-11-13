@@ -21,13 +21,13 @@ A self-hosted sandbox for autonomous coding agents, built on Proxmox.
 > **Status: concept.** There's no release yet. This repository holds the design for now.
 >
 > Voliere is deliberately opinionated about its tools: Proxmox, Tailscale,
-> Gitea, Coolify, Cloudflare, and T3 Code. It's built around my own needs first,
+> GitHub, Coolify, Cloudflare, and T3 Code. It's built around my own needs first,
 > and support for alternatives may come later.
 
 Voliere is a collection of OpenTofu and Ansible files that turns a Proxmox host
 into a sandbox where coding agents run unattended,
-with permission prompts off. You send a spec and get reviewed pull requests with
-preview URLs back, on hardware and accounts you control.
+with permission prompts off. You send an idea or a spec and get reviewed pull
+requests with preview URLs back, on hardware and accounts you control.
 
 Voliere runs no AI models itself. The agents use their providers' hosted
 models, through your subscriptions or API keys.
@@ -40,8 +40,9 @@ so it enforces isolation from outside the VMs.
 - **Proxmox** runs the VMs, and its firewall filters their egress.
 - **Tailscale** provides cross-device access, and its ACL limits what the VMs can reach.
 - **T3 Code** orchestrates worker and reviewer agents of your choice.
-- **Gitea** holds the agents' repositories, with branch protection that requires CI
-  and a review.
+- **GitHub** holds the agents' repositories in their own org. On your own
+  repositories, a ruleset lets agents propose, and nothing merges without
+  your approval.
 - **Coolify** deploys previews behind **Cloudflare Tunnel** and Access.
 - **OpenTofu** and **Ansible** rebuild the entire environment in under an hour.
 
